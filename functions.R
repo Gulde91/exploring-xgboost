@@ -31,7 +31,7 @@ define_search_grid <- function(n) {
 
   set.seed(4252)
   search_grid <- data.frame(
-    eta = fit_distr(stats::runif, 0.001, 0.5, n = n, min = 0.001, max = 0.3) %>% round(3),
+    eta = fit_distr(stats::runif, 0.001, 0.2, n = n, min = 0.001, max = 0.3) %>% round(3),
     max_depth = fit_distr(stats::rpois, 1, 12, n = n, lambda = 5),
     gamma = fit_distr(stats::rpois, 0, 10, n = n, lambda = 3),
     min_child_weight = fit_distr(sample, 0, 50, x = 0:50, size = n, replace = TRUE),
