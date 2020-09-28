@@ -1,7 +1,3 @@
----
-title: "readme"
-output: html_document
----
 
 ## Formål
 Formålet med dette projekter er empirisk at undersøge og forstå XGBoost algoritmen. 
