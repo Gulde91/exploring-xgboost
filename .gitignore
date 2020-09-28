@@ -1,5 +1,7 @@
 .Rproj.user
 .Rhistory
 .RData
+*.rda
 .Ruserdata
 exploring-xgboost.Rproj
+*.html
