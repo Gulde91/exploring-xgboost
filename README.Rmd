@@ -35,9 +35,9 @@ En roc kurve med tilhørende auc værdier for hver af de 3 modeller ses i plotte
 ![](./results/cat_exp_roc_plot.jpg)
 
 Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.   
-  1. Model med numeriske features: `r round(cat_featurtes_result$acc_num_model, 4)`%  
-  2. Model med one-hot encoded features: `r round(cat_featurtes_result$acc_one_hot_model, 4)`%  
-  3. Model med weight of evidens encoded features: `r round(cat_featurtes_result$acc_woe_model, 4)`%   
+  1. Model med numeriske features: `r round(cat_featurtes_result$acc_num_model, 4)`   
+  2. Model med one-hot encoded features: `r round(cat_featurtes_result$acc_one_hot_model, 4)`  
+  3. Model med weight of evidens encoded features: `r round(cat_featurtes_result$acc_woe_model, 4)`  
 
 
 #### Sparse vs dense træningsdata
