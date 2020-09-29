@@ -189,7 +189,7 @@ rocs <- performance(pred, "tpr", "fpr")
 
 jpeg("./results/cat_exp_roc_plot.jpg")
 
-plot(rocs, col = as.list(1:m), main = "Test Set ROC Curves")
+plot(rocs, col = as.list(1:m), main = "ROC Curves")
 
 legend(x = "bottomright",
        legend = c(paste("Num model auc:", auc_num),

@@ -1,0 +1,43 @@
+---
+title: "Readme"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+### Formål
+Formålet med dette projekter er empirisk at undersøge og forstå XGBoost algoritmen. 
+
+#### Data
+Til at undersøge XGBoost bruges følgende datasæt:   
+  - [Adult](https://rpubs.com/H_Zhu/235617)
+
+#### XGBoost og kategorisk data
+```{r resultater}
+load("./results/cat_featurtes_result.rda")
+```
+
+Her er blevet trænet 3 xgboost modeller med binær target på features der alle er kategoriske på adult-datasættet. Forskellen på modellerne er hvordan de kategoriske features er håndteret. Der er gjort på følgende måde:  
+  1. De er blot taget med som numeriske features  
+  2. De er one-hot encoded  
+  3. Weight of evidens er benyttet  
+
+Modellerne er blevet tunet med random search metoden, med en tune length på `r cat_featurtes_result$tune_lenght`, på følgende parametre; `r cat_featurtes_result$tune_params`.
+
+Træningstiderne for de 3 modeller kan ses her:  
+  1. Model med numeriske features: `r cat_featurtes_result$time_num_model[[1]]` sekunder  
+  2. Model med one hot encoded features: `r cat_featurtes_result$time_one_hot_model[[1]]` sekunder  
+  3. Model med weight of evidence encoded features: `r cat_featurtes_result$time_woe_model[[1]]` sekunder  
+
+En roc kurve med tilhørende auc værdier for hver af de 3 modeller ses i plottet.  
+![](./results/cat_exp_roc_plot.jpg)
+
+Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.   
+  1. Model med numeriske features: `r round(cat_featurtes_result$acc_num_model, 4)`   
+  2. Model med one-hot encoded features: `r round(cat_featurtes_result$acc_one_hot_model, 4)`  
+  3. Model med weight of evidens encoded features: `r round(cat_featurtes_result$acc_woe_model, 4)`  
+
+
+#### Sparse vs dense træningsdata
