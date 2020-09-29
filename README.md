@@ -35,8 +35,8 @@ plottet.
 ![](./results/cat_exp_roc_plot.jpg)
 
 Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.  
-1\. Model med numeriske features: 0.8277%  
-2\. Model med one-hot encoded features: 0.8236%  
-3\. Model med weight of evidens encoded features: 0.8312%
+1\. Model med numeriske features: 0.8277  
+2\. Model med one-hot encoded features: 0.8236  
+3\. Model med weight of evidens encoded features: 0.8312
 
 #### Sparse vs dense træningsdata
