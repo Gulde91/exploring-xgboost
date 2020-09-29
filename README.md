@@ -40,3 +40,27 @@ Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 3\. Model med weight of evidens encoded features: 0.8312
 
 #### Sparse vs dense træningsdata
+
+Her er blevet trænet 2 modeller på identisk datagrundlag. Forskellen
+ligger i dataformatet til XGB-modellen. I det ene tilfælde er input til
+modellen en sparse matrix (dgCMatrix) og i det andet tilfælde er input
+en dense matrix (matrix). Den primære interesse er at finde ud af, hvor
+stor tidsforskellen er på at træne en XGB-model på henholdsvis sparse og
+dense data. Modellerne tunes med 5 fold crossvalidation over det samme
+random search grid med længden 50 på parametrene; eta, max\_depth,
+gamma, min\_child\_weight, subsample, colsample\_bytree, lambda.
+Træningstiden kan ses her:  
+\- Model på sparse data: 180.14 sekunder  
+\- Model på dense data: 540.07 sekunder  
+Som der kan ses er modellen tunet på sparse data omtrent 3 gange
+hurtigere end modellen tunet på dense data.
+
+En roc kurve med tilhørende auc værdier for de 2 modeller ses i
+plottet.  
+![](./results/sparse_vs_dense_roc_plot.jpg)
+
+Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.  
+\- Model på sparse data: 0.8286  
+\- Model på dense data: 0.8275
+
+<!-- skyldes forskellen i resultaterne random subsampling i modellerne fx i subsample_bytree, eller er det pga. input dataformatet? -->
