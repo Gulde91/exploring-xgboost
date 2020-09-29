@@ -38,6 +38,8 @@ response_test <- response[-index]
 base_score <- round(sum(response_train) / length(response_train), 2)
 cross_val <- 5
 
+cat_featurtes_result <- list()
+
 # data hvor faktor er konverteret til numeriske features ----
 data_num <- data
 data_num <- apply(data_num, 2, function(x) as.numeric(as.factor(x)))
@@ -84,7 +86,11 @@ test_woe_sparse <- as(test_woe_sparse, "dgCMatrix")
 class(train_woe_sparse) == class(train_num_sparse)
 
 # sætter model parametre ----
-search_grid <- define_search_grid(n = 100)
+n <- 100
+search_grid <- define_search_grid(n)
+
+cat_featurtes_result$tune_lenght <- n
+cat_featurtes_result$tune_params <- names(search_grid[[1]])
 
 # model på numeriske features ----
 cat("tuner numerisk model\n")
@@ -96,7 +102,8 @@ models_num_tune <- lapply(search_grid,
                                                  cross_val,
                                                  base_score)
                           )
-tictoc::toc()
+tid <- tictoc::toc()
+cat_featurtes_result$time_num_model <- tid$toc - tid$tic
 
 cv_results <- models_num_tune %>%
               bind_rows() %>%
@@ -120,7 +127,8 @@ models_one_hot_tune <- lapply(search_grid,
                                                      cross_val,
                                                      base_score)
                               )
-tictoc::toc()
+tid <- tictoc::toc()
+cat_featurtes_result$time_one_hot_model <- tid$toc - tid$tic
 
 cv_results_one_hot <- models_one_hot_tune %>%
                       bind_rows() %>%
@@ -146,7 +154,8 @@ models_woe_tune <- lapply(search_grid,
                                                  cross_val,
                                                  base_score)
 )
-tictoc::toc()
+tid <- tictoc::toc()
+cat_featurtes_result$time_woe_model <- tid$toc - tid$tic
 
 cv_results <- models_woe_tune %>%
               bind_rows() %>%
@@ -176,29 +185,38 @@ actuals_list <- rep(list(response_test), m)
 
 pred <- prediction(pred_list, actuals_list)
 rocs <- performance(pred, "tpr", "fpr")
+
+
+jpeg("./results/cat_exp_roc_plot.jpg")
+
 plot(rocs, col = as.list(1:m), main = "Test Set ROC Curves")
 
 legend(x = "bottomright",
        legend = c(paste("Num model auc:", auc_num),
                   paste("One hot auc:", auc_one_hot),
                   paste("Woe auc:", auc_woe)),
-       fill = 1:m, cex = 0.75)
+       fill = 1:m, cex = 1)
+
+dev.off()
 
 # udregner accuracy
 pred_num_class <- ifelse(pred_num >= 0.5, 1, 0)
 pred_one_hot_class <- ifelse(pred_one_hot >= 0.5, 1, 0)
 pred_woe_class <- ifelse(pred_woe >= 0.5, 1, 0)
 
-cat("Accuracy for numerisk model er:",
-    sum(pred_num_class == response_test) / length(response_test))
+acc_num_model <- sum(pred_num_class == response_test) / length(response_test)
+acc_one_hot_model <- sum(pred_one_hot_class == response_test) / length(response_test)
+acc_woe_model <- sum(pred_woe_class == response_test) / length(response_test)
 
-cat("Accuracy for one hot encoding model er:",
-    sum(pred_one_hot_class == response_test) / length(response_test))
+cat("Accuracy for numerisk model er:", acc_num_model)
+cat("Accuracy for one hot encoding model er:", acc_one_hot_model)
+cat("Accuracy for weight of evidence model er:", acc_woe_model)
 
-cat("Accuracy for weight of evidence model er:",
-    sum(pred_woe_class == response_test) / length(response_test))
+cat_featurtes_result$acc_num_model <- acc_num_model
+cat_featurtes_result$acc_one_hot_model <- acc_one_hot_model
+cat_featurtes_result$acc_woe_model <- acc_woe_model
 
-
+save(cat_featurtes_result, file = "./results/cat_featurtes_result.rda")
 
 # konklusion ----
 # Her er blevet trænet 2 xgboost modeller med binær target på
