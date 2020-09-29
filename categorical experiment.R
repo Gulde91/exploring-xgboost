@@ -1,4 +1,3 @@
-library(readr)
 library(caret)
 library(klaR)
 library(dplyr)
@@ -38,7 +37,7 @@ response_test <- response[-index]
 base_score <- round(sum(response_train) / length(response_train), 2)
 cross_val <- 5
 
-cat_featurtes_result <- list()
+cat_features_result <- list()
 
 # data hvor faktor er konverteret til numeriske features ----
 data_num <- data
@@ -89,8 +88,8 @@ class(train_woe_sparse) == class(train_num_sparse)
 n <- 100
 search_grid <- define_search_grid(n)
 
-cat_featurtes_result$tune_lenght <- n
-cat_featurtes_result$tune_params <- names(search_grid[[1]])
+cat_features_result$tune_lenght <- n
+cat_features_result$tune_params <- names(search_grid[[1]])
 
 # model på numeriske features ----
 cat("tuner numerisk model\n")
@@ -103,7 +102,7 @@ models_num_tune <- lapply(search_grid,
                                                  base_score)
                           )
 tid <- tictoc::toc()
-cat_featurtes_result$time_num_model <- tid$toc - tid$tic
+cat_features_result$time_num_model <- tid$toc - tid$tic
 
 cv_results <- models_num_tune %>%
               bind_rows() %>%
@@ -128,7 +127,7 @@ models_one_hot_tune <- lapply(search_grid,
                                                      base_score)
                               )
 tid <- tictoc::toc()
-cat_featurtes_result$time_one_hot_model <- tid$toc - tid$tic
+cat_features_result$time_one_hot_model <- tid$toc - tid$tic
 
 cv_results_one_hot <- models_one_hot_tune %>%
                       bind_rows() %>%
@@ -142,8 +141,6 @@ model_one_hot <- xgboost(data = train_one_hot_sparse, label = response_train,
                          verbose = 1,
                          print_every_n = 20)
 
-
-
 # model på woe features ----
 cat("tuner woe model\n")
 tictoc::tic()
@@ -155,7 +152,7 @@ models_woe_tune <- lapply(search_grid,
                                                  base_score)
 )
 tid <- tictoc::toc()
-cat_featurtes_result$time_woe_model <- tid$toc - tid$tic
+cat_features_result$time_woe_model <- tid$toc - tid$tic
 
 cv_results <- models_woe_tune %>%
               bind_rows() %>%
@@ -186,7 +183,6 @@ actuals_list <- rep(list(response_test), m)
 pred <- prediction(pred_list, actuals_list)
 rocs <- performance(pred, "tpr", "fpr")
 
-
 jpeg("./results/cat_exp_roc_plot.jpg")
 
 plot(rocs, col = as.list(1:m), main = "ROC Curves")
@@ -212,11 +208,11 @@ cat("Accuracy for numerisk model er:", acc_num_model)
 cat("Accuracy for one hot encoding model er:", acc_one_hot_model)
 cat("Accuracy for weight of evidence model er:", acc_woe_model)
 
-cat_featurtes_result$acc_num_model <- acc_num_model
-cat_featurtes_result$acc_one_hot_model <- acc_one_hot_model
-cat_featurtes_result$acc_woe_model <- acc_woe_model
+cat_features_result$acc_num_model <- acc_num_model
+cat_features_result$acc_one_hot_model <- acc_one_hot_model
+cat_features_result$acc_woe_model <- acc_woe_model
 
-save(cat_featurtes_result, file = "./results/cat_featurtes_result.rda")
+save(cat_features_result, file = "./results/cat_features_result.rda")
 
 # konklusion ----
 # Her er blevet trænet 2 xgboost modeller med binær target på

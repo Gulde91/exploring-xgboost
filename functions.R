@@ -26,7 +26,15 @@ fit_distr <- function(FUN, lower, upper, ...) {
 
 
 
-# Konstruerer random search grid
+# define_search_grid ----------------------------------------------------------
+#' @title define_search_grid
+#'
+#' @description Konstruere random search grid
+#'
+#' @param n tune length
+#'
+#' @return Random search grid
+#'
 define_search_grid <- function(n) {
 
   set.seed(4252)
@@ -44,7 +52,6 @@ define_search_grid <- function(n) {
 
   return(search_grid)
 }
-
 
 
 # fit_xgb_cv ------------------------------------------------------------------
@@ -75,8 +82,8 @@ fit_xgb_cv <- function(x, xgb_matrix, label, cv_folds = 3, ...) {
                            early_stopping_rounds = 25,
                            maximize = TRUE,
                            seed = 874,
-                           verbose = 0#,
-                           #...
+                           verbose = 0,
+                           ...
                            )
 
   output <- c(unlist(model$params[[1]]),
