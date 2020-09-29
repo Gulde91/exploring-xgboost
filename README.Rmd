@@ -21,7 +21,7 @@ Her er blevet trænet 2 xgboost modeller med binær target på features der alle
 Modellerner er blevet tunet med random search metoden på 
 
 ```{r}
-load("./results/cat_exp_roc_plot.jpg")
+plot(cat_exp_roc_plot)
 ```
 
 
