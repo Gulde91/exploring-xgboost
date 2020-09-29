@@ -22,12 +22,7 @@ features er håndteret. Der er gjort på følgende måde:
 
 Modellerner er blevet tunet med random search metoden på
 
-``` r
-summary(rep(1:10, 10))
-```
-
-    ##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
-    ##     1.0     3.0     5.5     5.5     8.0    10.0
+![](./results/cat_exp_roc_plot.jpg)
 
 Modellerne performer stort set ens når der måles på roc auc og accuracy.
 Dog er der stor forskel i træningstiden på modellerne. One-hot modellen

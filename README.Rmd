@@ -1,6 +1,5 @@
 ---
 title: "Readme"
-#date: "8/22/2018"
 output: github_document
 ---
 
@@ -20,9 +19,7 @@ Her er blevet trænet 2 xgboost modeller med binær target på features der alle
 
 Modellerner er blevet tunet med random search metoden på 
 
-```{r}
-summary(rep(1:10, 10))
-```
+![](./results/cat_exp_roc_plot.jpg)
 
 
 Modellerne performer stort set ens når der måles på roc auc og accuracy. Dog er der stor forskel i træningstiden på modellerne. One-hot modellen tager omtrent 25 % længere tid at tune end modellen med de numeriske features.
