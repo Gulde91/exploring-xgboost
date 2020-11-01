@@ -1,17 +1,17 @@
 Readme
 ================
 
-### Formål
+## Formål
 
 Formålet med dette projekter er empirisk at undersøge og forstå visse
 grene af XGBoost algoritmen.
 
-#### Data
+### Data
 
 Til at undersøge XGBoost bruges følgende datasæt:  
 \- [Adult](https://rpubs.com/H_Zhu/235617)
 
-#### XGBoost og kategorisk data
+### XGBoost og kategorisk data
 
 Her er blevet trænet 3 xgboost modeller med binær target på features der
 alle er kategoriske på adult-datasættet. Forskellen på modellerne er
@@ -39,7 +39,7 @@ Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 2\. Model med one-hot encoded features: 0.8236  
 3\. Model med weight of evidens encoded features: 0.8312
 
-#### Sparse vs dense træningsdata
+### Sparse vs dense træningsdata
 
 Her er blevet trænet 2 modeller på identisk datagrundlag (hvor
 kategoriske features er one-hot-encoded). Forskellen ligger i
@@ -56,7 +56,7 @@ Træningstiden kan ses her:
 Som der kan ses er modellen tunet på sparse data omtrent 3 gange
 hurtigere end modellen tunet på dense data.
 
-#### Missing data
+### Missing data
 
 Xgboost kan som standard godt håndtere NA i data. Gain ved et split
 bliver udregnet ud fra data som ikke er NA og de resterende samples med
@@ -67,17 +67,17 @@ hvilket format data er i (sparse eller dense matrix). Her imputeres NA i
 data og det gøres først random og bagefter systematisk. Kategoriske
 features er one-hot-encoded.
 
-###### Random imputation af NA
+##### Random imputation af NA
 
 Her er 10%, 20%, 30% og 40% af data imputeret med NA. Her er trænet 2
 modeller på samme data og med samme random search grid (der kan
 naturligvis være forskel på hvilke parametre der er optimale) for hvert
-niveau af NA procentdelen. Det ene datasæt er encoded som en sparse
+niveau af NA procent-delen. Det ene datasæt er encoded som en sparse
 matrix og det andet som en dense matrix.
 
 En roc kurve med tilhørende auc værdier for hver af de 2 modeller ses i
 plottet.  
-![](README_files/figure-gfm/na%20random%20plots-1.png)<!-- -->
+<img src="./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg" width="50%" /><img src="./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg" width="50%" /><img src="./results/sparse_vs_dense_random_na_roc_plot_30_percent.jpg" width="50%" /><img src="./results/sparse_vs_dense_random_na_roc_plot_40_percent.jpg" width="50%" />
 
 Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 
@@ -90,14 +90,9 @@ Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 7.  Model med sparse encoding og 40% NA 0.8085
 8.  Model med dense encoding og 40% NA 0.8094
 
-<!--
-  1. Model med sparse data: 
-  0.8216   
-  2. Model med dense data:
-  0.8214
--->
+![](./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg)![](./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg)
 
-###### Systematisk imputation af NA
+##### Systematisk imputation af NA
 
 Her er xx % af data imputeret med NA. Her er trænet 2 modeller på samme
 data og med samme search grid (der kan naturligvis være forskel på

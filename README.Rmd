@@ -4,19 +4,19 @@ output: github_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-library(ggplot2)
-library(cowplot)
+library(knitr)
+
+opts_chunk$set(echo = FALSE)
 ```
 
-### Formål
+## Formål
 Formålet med dette projekter er empirisk at undersøge og forstå visse grene af XGBoost algoritmen. 
 
-#### Data
+### Data
 Til at undersøge XGBoost bruges følgende datasæt:   
   - [Adult](https://rpubs.com/H_Zhu/235617)
 
-#### XGBoost og kategorisk data
+### XGBoost og kategorisk data
 ```{r results_cat_features}
 load("./results/cat_features_result.rda")
 ```
@@ -42,7 +42,7 @@ Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
   3. Model med weight of evidens encoded features: `r round(cat_features_result$acc_woe_model, 4)`  
 
 
-#### Sparse vs dense træningsdata
+### Sparse vs dense træningsdata
 ```{r results_sparse_dense}
 load("./results/sparse_vs_dense_result.rda")
 ```
@@ -52,10 +52,10 @@ Her er blevet trænet 2 modeller på identisk datagrundlag (hvor kategoriske fea
   - Model på dense data: `r sparse_vs_dense_result$time_dense_model[[1]]` sekunder  
 Som der kan ses er modellen tunet på sparse data omtrent `r round(sparse_vs_dense_result$time_dense_model[[1]] / sparse_vs_dense_result$time_sparse_model[[1]], 1)` gange hurtigere end modellen tunet på dense data. 
 
-#### Missing data 
+### Missing data 
 Xgboost kan som standard godt håndtere NA i data. Gain ved et split bliver udregnet ud fra data som ikke er NA og de resterende samples med NA bliver derefter assignet til den optimale direction. Der er dog den hage ved det, at hvis input er en sparse matrice, så bliver 0'er i data behandlet som NA. Her undersøges betydningen af at have NA i data og i hvilket format data er i (sparse eller dense matrix). Her imputeres NA i data og det gøres først random og bagefter systematisk. Kategoriske features er one-hot-encoded. 
 
-###### Random imputation af NA
+##### Random imputation af NA
 ```{r results sparse dense with random NA}
 load("./results/sparse_vs_dense_random_na_result.rda")
 
@@ -65,14 +65,16 @@ len <- length(percent)
 Her er `r paste0(percent[1:(len-2)], "%")`, `r percent[len-1]`% og `r percent[len]`% af data imputeret med NA. Her er trænet 2 modeller på samme data og med samme random search grid (der kan naturligvis være forskel på hvilke parametre der er optimale) for hvert niveau af NA procent-delen. Det ene datasæt er encoded som en sparse matrix og det andet som en dense matrix. 
 
 En roc kurve med tilhørende auc værdier for hver af de 2 modeller ses i plottet.  
-```{r na random plots}
-p1 <- ggdraw() + draw_image("./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg", scale = 1.1)
-p2 <- ggdraw() + draw_image("./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg", scale = 1.1)
-p3 <- ggdraw() + draw_image("./results/sparse_vs_dense_random_na_roc_plot_30_percent.jpg", scale = 1.1)
-p4 <- ggdraw() + draw_image("./results/sparse_vs_dense_random_na_roc_plot_40_percent.jpg", scale = 1.1)
+```{r na random plots, out.width="50%"}
+knitr::include_graphics(c(
+  "./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg",
+  "./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg"))
 
-plot_grid(p1, p2, p3, p4)
+knitr::include_graphics(
+  c("./results/sparse_vs_dense_random_na_roc_plot_30_percent.jpg",
+    "./results/sparse_vs_dense_random_na_roc_plot_40_percent.jpg"))
 ```
+
 
 Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 
@@ -97,8 +99,9 @@ for (i in 1:length(acc_measure)) {
 }
 ```
 
+![](./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg)![](./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg)
 
-###### Systematisk imputation af NA
+##### Systematisk imputation af NA
 Her er xx % af data imputeret med NA. Her er trænet 2 modeller på samme data og med samme search grid (der kan naturligvis være forskel på hvilke parametre der er optimale). Det ene datasæt er encoded som en sparse matrix og det andet som en dense matrix. 
 
 En roc kurve med tilhørende auc værdier for hver af de 2 modeller ses i plottet.  
