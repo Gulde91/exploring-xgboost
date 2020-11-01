@@ -3,8 +3,8 @@ Readme
 
 ### Formål
 
-Formålet med dette projekter er empirisk at undersøge og forstå XGBoost
-algoritmen.
+Formålet med dette projekter er empirisk at undersøge og forstå visse
+grene af XGBoost algoritmen.
 
 #### Data
 
@@ -41,11 +41,12 @@ Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 
 #### Sparse vs dense træningsdata
 
-Her er blevet trænet 2 modeller på identisk datagrundlag. Forskellen
-ligger i dataformatet til XGB-modellen. I det ene tilfælde er input til
-modellen en sparse matrix (dgCMatrix) og i det andet tilfælde er input
-en dense matrix (matrix). Den primære interesse er at finde ud af, hvor
-stor tidsforskellen er på at træne en XGB-model på henholdsvis sparse og
+Her er blevet trænet 2 modeller på identisk datagrundlag (hvor
+kategoriske features er one-hot-encoded). Forskellen ligger i
+dataformatet til XGB-modellen. I det ene tilfælde er input til modellen
+en sparse matrix (dgCMatrix) og i det andet tilfælde er input en dense
+matrix (matrix). Den primære interesse er at finde ud af, hvor stor
+tidsforskellen er på at træne en XGB-model på henholdsvis sparse og
 dense data. Modellerne tunes med 5 fold crossvalidation over det samme
 random search grid med længden 50 på parametrene; eta, max\_depth,
 gamma, min\_child\_weight, subsample, colsample\_bytree, lambda.
@@ -55,12 +56,58 @@ Træningstiden kan ses her:
 Som der kan ses er modellen tunet på sparse data omtrent 3 gange
 hurtigere end modellen tunet på dense data.
 
-En roc kurve med tilhørende auc værdier for de 2 modeller ses i
+#### Missing data
+
+Xgboost kan som standard godt håndtere NA i data. Gain ved et split
+bliver udregnet ud fra data som ikke er NA og de resterende samples med
+NA bliver derefter assignet til den optimale direction. Der er dog den
+hage ved det, at hvis input er en sparse matrice, så bliver 0’er i data
+behandlet som NA. Her undersøges betydningen af at have NA i data og i
+hvilket format data er i (sparse eller dense matrix). Her imputeres NA i
+data og det gøres først random og bagefter systematisk. Kategoriske
+features er one-hot-encoded.
+
+###### Random imputation af NA
+
+Her er 10%, 20%, 30% og 40% af data imputeret med NA. Her er trænet 2
+modeller på samme data og med samme random search grid (der kan
+naturligvis være forskel på hvilke parametre der er optimale) for hvert
+niveau af NA procentdelen. Det ene datasæt er encoded som en sparse
+matrix og det andet som en dense matrix.
+
+En roc kurve med tilhørende auc værdier for hver af de 2 modeller ses i
 plottet.  
-![](./results/sparse_vs_dense_roc_plot.jpg)
+![](README_files/figure-gfm/na%20random%20plots-1.png)<!-- -->
+
+Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
+
+1.  Model med sparse encoding og 10% NA 0.8216
+2.  Model med dense encoding og 10% NA 0.8229
+3.  Model med sparse encoding og 20% NA 0.8214
+4.  Model med dense encoding og 20% NA 0.8205
+5.  Model med sparse encoding og 30% NA 0.8123
+6.  Model med dense encoding og 30% NA 0.8122
+7.  Model med sparse encoding og 40% NA 0.8085
+8.  Model med dense encoding og 40% NA 0.8094
+
+<!--
+  1. Model med sparse data: 
+  0.8216   
+  2. Model med dense data:
+  0.8214
+-->
+
+###### Systematisk imputation af NA
+
+Her er xx % af data imputeret med NA. Her er trænet 2 modeller på samme
+data og med samme search grid (der kan naturligvis være forskel på
+hvilke parametre der er optimale). Det ene datasæt er encoded som en
+sparse matrix og det andet som en dense matrix.
+
+En roc kurve med tilhørende auc værdier for hver af de 2 modeller ses i
+plottet.  
+![](./results/cat_exp_roc_plot.jpg) <!-- indsæt rigtigt plot -->
 
 Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.  
-\- Model på sparse data: 0.8286  
-\- Model på dense data: 0.8275
-
-<!-- skyldes forskellen i resultaterne random subsampling i modellerne fx i subsample_bytree, eller er det pga. input dataformatet? -->
+1\. Model med sparse data: 0.8277  
+2\. Model med dense data: 0.8236
