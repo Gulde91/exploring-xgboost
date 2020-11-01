@@ -54,7 +54,7 @@ Som der kan ses er modellen tunet på sparse data omtrent `r round(sparse_vs_den
 
 ### Missing data 
 Xgboost kan som standard godt håndtere NA i data. Gain ved et split bliver udregnet ud fra data som ikke er NA og de resterende samples med NA bliver derefter assignet til den optimale direction. Der er dog den hage ved det, at hvis input er en sparse matrice, så bliver 0'er i data behandlet som NA. Her undersøges betydningen af at have NA i data og i hvilket format data er i (sparse eller dense matrix). Her imputeres NA i data og det gøres først random og bagefter systematisk. Kategoriske features er one-hot-encoded. 
-
+  
 ##### Random imputation af NA
 ```{r results sparse dense with random NA}
 load("./results/sparse_vs_dense_random_na_result.rda")
@@ -98,9 +98,7 @@ for (i in 1:length(acc_measure)) {
       "\n", sep = "")
 }
 ```
-
-![](./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg)![](./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg)
-
+  
 ##### Systematisk imputation af NA
 Her er xx % af data imputeret med NA. Her er trænet 2 modeller på samme data og med samme search grid (der kan naturligvis være forskel på hvilke parametre der er optimale). Det ene datasæt er encoded som en sparse matrix og det andet som en dense matrix. 
 

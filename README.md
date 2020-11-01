@@ -90,8 +90,6 @@ Til sidst er accuracy udregnet med et cutoff på 0.5 for hver model.
 7.  Model med sparse encoding og 40% NA 0.8085
 8.  Model med dense encoding og 40% NA 0.8094
 
-![](./results/sparse_vs_dense_random_na_roc_plot_10_percent.jpg)![](./results/sparse_vs_dense_random_na_roc_plot_20_percent.jpg)
-
 ##### Systematisk imputation af NA
 
 Her er xx % af data imputeret med NA. Her er trænet 2 modeller på samme
